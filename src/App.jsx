@@ -304,7 +304,7 @@ export default function SalonBooking() {
 
   function submitAdminPw(e) {
     e.preventDefault();
-    if (toEnglishDigits(pwInput).trim() === "1234") {
+    if (toEnglishDigits(pwInput).trim() === "MNewface2284") {
       setAdminAuthed(true);
       setPwError("");
     } else {
