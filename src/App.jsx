@@ -462,7 +462,7 @@ export default function SalonBooking() {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="مثلاً سارا محمدی"
+                    placeholder="مثلاً فرشید کبیری "
                     className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
                     style={{ border: `1px solid ${palette.line}`, backgroundColor: "#fff" }}
                   />
@@ -501,22 +501,15 @@ export default function SalonBooking() {
         <section className="mt-12">
           <h3 className="text-sm font-semibold mb-3" style={{ color: palette.inkSoft }}>گالری آرایشگاه</h3>
           <div className="grid grid-cols-2 gap-3 mb-3">
-            {[1, 2].map((i) => (
-              <div
-                key={i}
-                className="aspect-square rounded-xl flex items-center justify-center text-xs text-center px-2"
-                style={{ border: `1.5px dashed ${palette.gold}`, color: palette.inkSoft }}
-              >
-                عکس {toPersianDigits(i)} را اینجا جایگزین کنید
-              </div>
-            ))}
-          </div>
-          <div
-            className="mx-auto w-2/3 sm:w-1/2 rounded-xl flex items-center justify-center text-xs text-center px-2"
-            style={{ border: `1.5px dashed ${palette.gold}`, color: palette.inkSoft, aspectRatio: "3 / 4" }}
-          >
-            عکس {toPersianDigits(3)} را اینجا جایگزین کنید
-          </div>
+  <img src="/salon1.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
+  <img src="/salon2.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
+</div>
+<img
+  src="/salon3.jpg"
+  alt="سالن نیوفیس"
+  className="mx-auto w-2/3 sm:w-1/2 rounded-xl object-cover"
+  style={{ aspectRatio: "3 / 4" }}
+/>
         </section>
 
         {/* Admin entry point */}
