@@ -312,8 +312,20 @@ export default function SalonBooking() {
     }
   }
 
+  const todayKey = isoKey(new Date());
   const sortedBookings = [...bookings].sort((a, b) => a.dateKey.localeCompare(b.dateKey) || a.time.localeCompare(b.time));
 
+  useEffect(() => {
+    if (!adminAuthed) return;
+    const pastIds = bookings.filter((b) => b.dateKey < todayKey).map((b) => b.id);
+    if (pastIds.length === 0) return;
+    (async () => {
+      const { error } = await supabase.from("bookings").delete().in("id", pastIds);
+      if (!error) {
+        setBookings((prev) => prev.filter((b) => !pastIds.includes(b.id)));
+      }
+    })();
+  }, [adminAuthed]);
   return (
     <div dir="rtl" style={{ fontFamily: fontStack, backgroundColor: palette.bg, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full">
       {/* Header / Hero */}
@@ -572,20 +584,32 @@ export default function SalonBooking() {
                   {sortedBookings.length === 0 ? (
                     <p className="text-sm" style={{ color: palette.inkSoft }}>هنوز نوبتی ثبت نشده است.</p>
                   ) : (
-                    <div className="space-y-2">
-                      {sortedBookings.map((b) => (
-                        <div key={b.id} className="flex items-center justify-between rounded-xl p-3" style={{ border: `1px solid ${palette.line}` }}>
-                          <div>
-                            <div className="text-sm font-semibold">{b.name}</div>
-                            <div className="text-xs" style={{ color: palette.inkSoft }}>
-                              {b.weekday} {b.dateDisplay} — ساعت {toPersianDigits(b.time)} — {toPersianDigits(b.phone)}
+                 <div className="space-y-2">
+                      {sortedBookings.map((b) => {
+                        const isToday = b.dateKey === todayKey;
+                        return (
+                          <div
+                            key={b.id}
+                            className="flex items-center justify-between rounded-xl p-3"
+                            style={{
+                              border: `1px solid ${isToday ? palette.gold : palette.line}`,
+                              backgroundColor: isToday ? palette.goldSoft : "transparent",
+                            }}
+                          >
+                            <div>
+                              <div className="text-sm font-semibold">
+                                {b.name} {isToday && <span style={{ color: palette.wineDeep }}>(امروز)</span>}
+                              </div>
+                              <div className="text-xs" style={{ color: palette.inkSoft }}>
+                                {b.weekday} {b.dateDisplay} — ساعت {toPersianDigits(b.time)} — {toPersianDigits(b.phone)}
+                              </div>
                             </div>
+                            <button onClick={() => deleteBooking(b.id)} style={{ color: palette.wine }}>
+                              <Trash2 size={17} />
+                            </button>
                           </div>
-                          <button onClick={() => deleteBooking(b.id)} style={{ color: palette.wine }}>
-                            <Trash2 size={17} />
-                          </button>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   )}
                 </div>
