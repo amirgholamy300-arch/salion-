@@ -194,13 +194,11 @@ const audioRef = useRef(null);
         setMusicOn(true);
       }
       window.removeEventListener("click", unlockMusic);
-      window.removeEventListener("touchstart", unlockMusic);
+      
     };
     window.addEventListener("click", unlockMusic);
-    window.addEventListener("touchstart", unlockMusic);
     return () => {
       window.removeEventListener("click", unlockMusic);
-      window.removeEventListener("touchstart", unlockMusic);
     };
   }, []);
 
