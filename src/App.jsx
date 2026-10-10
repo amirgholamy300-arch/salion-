@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Scissors, Clock, Phone, User, X, Check, Lock, Trash2, Plane } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Scissors, Clock, Phone, User, X, Check, Lock, Trash2, Plane, Volume2, VolumeX } from "lucide-react";
 import { supabase } from "./lib/supabaseClient";
 
 /* ---------------- Jalali (Persian) calendar conversion ---------------- */
@@ -182,7 +182,40 @@ export default function SalonBooking() {
   const [formError, setFormError] = useState("");
   const [successInfo, setSuccessInfo] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+const audioRef = useRef(null);
+  const [musicOn, setMusicOn] = useState(false);
 
+  useEffect(() => {
+    const unlockMusic = () => {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.muted = false;
+        audio.play().catch(() => {});
+        setMusicOn(true);
+      }
+      window.removeEventListener("click", unlockMusic);
+      window.removeEventListener("touchstart", unlockMusic);
+    };
+    window.addEventListener("click", unlockMusic);
+    window.addEventListener("touchstart", unlockMusic);
+    return () => {
+      window.removeEventListener("click", unlockMusic);
+      window.removeEventListener("touchstart", unlockMusic);
+    };
+  }, []);
+
+  function toggleMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (musicOn) {
+      audio.pause();
+      setMusicOn(false);
+    } else {
+      audio.muted = false;
+      audio.play().catch(() => {});
+      setMusicOn(true);
+    }
+  }
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminAuthed, setAdminAuthed] = useState(false);
   const [pwInput, setPwInput] = useState("");
@@ -328,12 +361,22 @@ export default function SalonBooking() {
   }, [adminAuthed]);
   return (
     <div dir="rtl" style={{ fontFamily: fontStack, backgroundColor: palette.bg, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full">
+<audio ref={audioRef} src="/music.mp3" loop muted autoPlay />
+
       {/* Header / Hero */}
       <header className="px-6 pt-12 pb-10 text-center relative overflow-hidden">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Scissors size={22} style={{ color: palette.wine }} />
           <Pill>سالن نیوفیس</Pill>
         </div>
+        <button
+          onClick={toggleMusic}
+          className="inline-flex items-center gap-1 text-xs mb-2"
+          style={{ color: palette.inkSoft }}
+        >
+          {musicOn ? <Volume2 size={14} /> : <VolumeX size={14} />}
+          {musicOn ? "موزیک روشن" : "پخش موزیک"}
+        </button>
         <h1 className="text-3xl sm:text-4xl font-bold mb-3" style={{ color: palette.wineDeep }}>
           رزرو آنلاین نوبت آرایشگاه
         </h1>
