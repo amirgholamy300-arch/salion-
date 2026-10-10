@@ -358,7 +358,17 @@ const audioRef = useRef(null);
     })();
   }, [adminAuthed]);
   return (
-    <div dir="rtl" style={{ fontFamily: fontStack, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full overflow-hidden animated-gradient-bg">
+    <div dir="rtl" style={{ fontFamily: fontStack, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full overflow-hidden">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="fixed inset-0 w-full h-full object-cover -z-10"
+        src="/bg-video.mp4"
+      />
+      <div className="fixed inset-0 -z-10" style={{ backgroundColor: "rgba(246,239,233,0.55)" }} />
+
       <div className="blob blob-gold" style={{ width: 280, height: 280, top: -60, right: -60 }} />
       <div className="blob blob-wine" style={{ width: 240, height: 240, bottom: 40, left: -80 }} />
       <div className="blob blob-gold-soft" style={{ width: 200, height: 200, top: "40%", right: "20%" }} />
