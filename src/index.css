@@ -28,9 +28,9 @@ html, body, #root {
 }
 
 .animated-gradient-bg {
-  background: linear-gradient(120deg, #F6EFE9, #F3E3D6, #EADFCB, #F6EFE9);
-  background-size: 300% 300%;
-  animation: gradientShift 18s ease infinite;
+  background: linear-gradient(120deg, #F6EFE9, #EFD9B0, #F3D9DD, #E8CFE0, #F6EFE9);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
 }
 
 .blob {
