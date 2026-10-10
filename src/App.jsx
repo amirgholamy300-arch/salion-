@@ -432,10 +432,13 @@ const audioRef = useRef(null);
                     key={day.key}
                     onClick={() => openDay(day)}
                     disabled={isBlocked}
-                    className="rounded-2xl p-5 text-center transition"
+                    className="rounded-2xl p-5 text-center transition backdrop-blur-md"
                     style={{
-                      backgroundColor: isActive ? palette.wine : palette.card,
-                      border: `1px solid ${isActive ? palette.wine : palette.line}`,
+                      backgroundColor: isActive ? "rgba(124,42,59,0.55)" : "rgba(255,255,255,0.35)",
+                      border: `1px solid ${isActive ? "rgba(124,42,59,0.9)" : "rgba(176,138,78,0.45)"}`,
+                      boxShadow: isActive
+                        ? "0 0 18px rgba(124,42,59,0.65), 0 0 34px rgba(176,138,78,0.25)"
+                        : "0 0 10px rgba(176,138,78,0.3)",
                       opacity: isBlocked ? 0.55 : 1,
                       cursor: isBlocked ? "not-allowed" : "pointer",
                     }}
@@ -483,15 +486,16 @@ const audioRef = useRef(null);
                       const taken = isTimeTaken(selectedDay.key, t);
                       const active = selectedTime === t;
                       return (
-                        <button
+                    <button
                           key={t}
                           disabled={taken}
                           onClick={() => setSelectedTime(t)}
-                          className="px-4 py-2 rounded-xl text-sm font-medium transition"
+                          className="px-4 py-2 rounded-xl text-sm font-medium transition backdrop-blur-sm"
                           style={{
-                            backgroundColor: taken ? "#EFE7E1" : active ? palette.wine : "#fff",
+                            backgroundColor: taken ? "rgba(239,231,225,0.6)" : active ? "rgba(124,42,59,0.6)" : "rgba(255,255,255,0.4)",
                             color: taken ? "#B7A99F" : active ? "#fff" : palette.ink,
-                            border: `1px solid ${active ? palette.wine : palette.line}`,
+                            border: `1px solid ${active ? "rgba(124,42,59,0.9)" : "rgba(176,138,78,0.4)"}`,
+                            boxShadow: active ? "0 0 14px rgba(124,42,59,0.6)" : "0 0 6px rgba(176,138,78,0.25)",
                             textDecoration: taken ? "line-through" : "none",
                             cursor: taken ? "not-allowed" : "pointer",
                           }}
@@ -540,8 +544,13 @@ const audioRef = useRef(null);
                 <button
                   type="submit"
                   disabled={submitting || !name.trim() || !/^\d{11}$/.test(toEnglishDigits(phone))}
-                  className="w-full py-3 rounded-xl text-sm font-bold disabled:opacity-50"
-                  style={{ backgroundColor: palette.wine, color: "#fff" }}
+                  className="w-full py-3 rounded-xl text-sm font-bold disabled:opacity-50 backdrop-blur-md"
+                  style={{
+                    backgroundColor: "rgba(124,42,59,0.75)",
+                    color: "#fff",
+                    border: "1px solid rgba(231,211,174,0.6)",
+                    boxShadow: "0 0 18px rgba(124,42,59,0.7), 0 0 34px rgba(176,138,78,0.35)",
+                  }}
                 >
                   {submitting ? "در حال ثبت..." : "ثبت نوبت"}
                 </button>
