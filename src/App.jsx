@@ -358,9 +358,12 @@ const audioRef = useRef(null);
     })();
   }, [adminAuthed]);
   return (
-    <div dir="rtl" style={{ fontFamily: fontStack, backgroundColor: palette.bg, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full">
-<audio ref={audioRef} src="/music.mp3" loop muted autoPlay />
+    <div dir="rtl" style={{ fontFamily: fontStack, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full overflow-hidden animated-gradient-bg">
+      <div className="blob blob-gold" style={{ width: 280, height: 280, top: -60, right: -60 }} />
+      <div className="blob blob-wine" style={{ width: 240, height: 240, bottom: 40, left: -80 }} />
+      <div className="blob blob-gold-soft" style={{ width: 200, height: 200, top: "40%", right: "20%" }} />
 
+      <audio ref={audioRef} src="/music.mp3" loop muted autoPlay />
       {/* Header / Hero */}
       <header className="px-6 pt-12 pb-10 text-center relative overflow-hidden">
         <div className="flex items-center justify-center gap-2 mb-4">
