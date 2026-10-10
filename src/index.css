@@ -5,3 +5,53 @@
 html, body, #root {
   height: 100%;
 }
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatBlob1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 60px) scale(1.15); }
+}
+
+@keyframes floatBlob2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-50px, -40px) scale(1.1); }
+}
+
+@keyframes floatBlob3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -50px) scale(1.08); }
+}
+
+.animated-gradient-bg {
+  background: linear-gradient(120deg, #F6EFE9, #F3E3D6, #EADFCB, #F6EFE9);
+  background-size: 300% 300%;
+  animation: gradientShift 18s ease infinite;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.blob-gold {
+  background: #C9A227;
+  animation: floatBlob1 14s ease-in-out infinite;
+}
+
+.blob-wine {
+  background: #7C2A3B;
+  animation: floatBlob2 16s ease-in-out infinite;
+}
+
+.blob-gold-soft {
+  background: #E7D3AE;
+  animation: floatBlob3 20s ease-in-out infinite;
+}
