@@ -7,9 +7,11 @@ html, body, #root {
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 0%; }
+  25% { background-position: 100% 0%; }
+  50% { background-position: 100% 100%; }
+  75% { background-position: 0% 100%; }
+  100% { background-position: 0% 0%; }
 }
 
 @keyframes floatBlob1 {
@@ -30,7 +32,7 @@ html, body, #root {
 .animated-gradient-bg {
   background: linear-gradient(120deg, #F6EFE9, #EFD9B0, #F3D9DD, #E8CFE0, #F6EFE9);
   background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
+  animation: gradientShift 7s ease infinite;
 }
 
 .blob {
