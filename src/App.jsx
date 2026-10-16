@@ -726,7 +726,7 @@ export default function SalonBooking() {
               </button>
             </div>
             <a href="tel:09010508174" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
-              <Phone size={16} style={{ color: "#EA7A2E" }} /> 09xxxxxxxxx
+              <Phone size={16} style={{ color: "#EA7A2E" }} /> 09010508174
             </a>
             <a href="https://instagram.com/mohsengholami_84" target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
               <Instagram size={16} style={{ color: "#EA7A2E" }} /> @mohsengholami_84
