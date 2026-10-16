@@ -725,14 +725,14 @@ export default function SalonBooking() {
                 <X size={16} />
               </button>
             </div>
-            <a href="tel:09xxxxxxxxx" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
+            <a href="tel:09010508174" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
               <Phone size={16} style={{ color: "#EA7A2E" }} /> 09xxxxxxxxx
             </a>
-            <a href="https://instagram.com/your_instagram" target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
-              <Instagram size={16} style={{ color: "#EA7A2E" }} /> @your_instagram
+            <a href="https://instagram.com/mohsengholami_84" target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
+              <Instagram size={16} style={{ color: "#EA7A2E" }} /> @mohsengholami_84
             </a>
-            <a href="https://rubika.ir/your_rubika_channel" target="_blank" rel="noreferrer" className="flex items-center gap-2" style={{ color: palette.ink }}>
-              <MessageCircle size={16} style={{ color: "#EA7A2E" }} /> @your_rubika_channel
+            <a href="https://rubika.ir/newface" target="_blank" rel="noreferrer" className="flex items-center gap-2" style={{ color: palette.ink }}>
+              <MessageCircle size={16} style={{ color: "#EA7A2E" }} /> @newface
             </a>
           </div>
         )}
