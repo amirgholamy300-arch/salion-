@@ -552,7 +552,7 @@ export default function SalonBooking() {
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="مثلاً سارا محمدی"
+                    placeholder="مثلاً امیر غلامی"
                     className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
                     style={{ border: `1px solid ${palette.line}`, backgroundColor: "#fff" }}
                   />
