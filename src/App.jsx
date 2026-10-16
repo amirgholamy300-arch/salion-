@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { Scissors, Clock, Phone, User, X, Check, Lock, Trash2, Plane, Volume2, VolumeX } from "lucide-react";
+import { Scissors, Clock, Phone, User, X, Check, Lock, Trash2, Plane, Volume2, VolumeX, Instagram, MessageCircle } from "lucide-react";
 import { supabase } from "./lib/supabaseClient";
 
 /* ---------------- Jalali (Persian) calendar conversion ---------------- */
@@ -182,7 +182,8 @@ export default function SalonBooking() {
   const [formError, setFormError] = useState("");
   const [successInfo, setSuccessInfo] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-const audioRef = useRef(null);
+
+  const audioRef = useRef(null);
   const [musicOn, setMusicOn] = useState(false);
 
   useEffect(() => {
@@ -194,7 +195,6 @@ const audioRef = useRef(null);
         setMusicOn(true);
       }
       window.removeEventListener("click", unlockMusic);
-      
     };
     window.addEventListener("click", unlockMusic);
     return () => {
@@ -214,10 +214,15 @@ const audioRef = useRef(null);
       setMusicOn(true);
     }
   }
+
   const [adminOpen, setAdminOpen] = useState(false);
   const [adminAuthed, setAdminAuthed] = useState(false);
   const [pwInput, setPwInput] = useState("");
   const [pwError, setPwError] = useState("");
+
+  const [visitCount, setVisitCount] = useState(null);
+  const [totalBookingsEver, setTotalBookingsEver] = useState(null);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -240,6 +245,22 @@ const audioRef = useRef(null);
       }
       if (sErr) setStorageOk(false);
 
+      const { data: statsRow, error: stErr } = await supabase
+        .from("stats")
+        .select("*")
+        .eq("id", 1)
+        .single();
+      if (mounted && !stErr && statsRow) {
+        setTotalBookingsEver(statsRow.total_bookings);
+      }
+
+      const { data: newVisitCount, error: vErr } = await supabase.rpc("increment_visit_count");
+      if (mounted && !vErr && typeof newVisitCount === "number") {
+        setVisitCount(newVisitCount);
+      } else if (mounted && statsRow) {
+        setVisitCount(statsRow.visit_count);
+      }
+
       if (mounted) setLoading(false);
     }
     load();
@@ -256,6 +277,7 @@ const audioRef = useRef(null);
         time: booking.time,
         name: booking.name,
         phone: booking.phone,
+        appointment_at: booking.appointmentAt,
       })
       .select()
       .single();
@@ -305,6 +327,10 @@ const audioRef = useRef(null);
     if (isTimeTaken(selectedDay.key, selectedTime)) { setFormError("این ساعت همین الان رزرو شد، یک ساعت دیگر را انتخاب کنید."); return; }
 
     setSubmitting(true);
+    const [apptHour, apptMinute] = selectedTime.split(":").map(Number);
+    const appointmentDate = new Date(selectedDay.dateObj);
+    appointmentDate.setHours(apptHour, apptMinute, 0, 0);
+
     const saved = await addBookingRemote({
       dateKey: selectedDay.key,
       dateDisplay: selectedDay.jalaliDate,
@@ -312,6 +338,7 @@ const audioRef = useRef(null);
       time: selectedTime,
       name: cleanName,
       phone: cleanPhone,
+      appointmentAt: appointmentDate.toISOString(),
     });
     setSubmitting(false);
     if (saved) {
@@ -356,24 +383,17 @@ const audioRef = useRef(null);
         setBookings((prev) => prev.filter((b) => !pastIds.includes(b.id)));
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminAuthed]);
-  return (
-    <div dir="rtl" style={{ fontFamily: fontStack, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full overflow-hidden">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="fixed inset-0 w-full h-full object-cover -z-10"
-        src="/bg-video.mp4"
-      />
-      <div className="fixed inset-0 -z-10" style={{ backgroundColor: "rgba(246,239,233,0.55)" }} />
 
+  return (
+    <div dir="rtl" style={{ fontFamily: fontStack, color: palette.ink, minHeight: "100%" }} className="relative min-h-screen w-full overflow-hidden animated-gradient-bg">
       <div className="blob blob-gold" style={{ width: 280, height: 280, top: -60, right: -60 }} />
       <div className="blob blob-wine" style={{ width: 240, height: 240, bottom: 40, left: -80 }} />
       <div className="blob blob-gold-soft" style={{ width: 200, height: 200, top: "40%", right: "20%" }} />
 
       <audio ref={audioRef} src="/music.mp3" loop muted autoPlay />
+
       {/* Header / Hero */}
       <header className="px-6 pt-12 pb-10 text-center relative overflow-hidden">
         <div className="flex items-center justify-center gap-2 mb-4">
@@ -499,7 +519,7 @@ const audioRef = useRef(null);
                       const taken = isTimeTaken(selectedDay.key, t);
                       const active = selectedTime === t;
                       return (
-                    <button
+                        <button
                           key={t}
                           disabled={taken}
                           onClick={() => setSelectedTime(t)}
@@ -532,7 +552,7 @@ const audioRef = useRef(null);
                   <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="مثلاً فرشید کبیری "
+                    placeholder="مثلاً سارا محمدی"
                     className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
                     style={{ border: `1px solid ${palette.line}`, backgroundColor: "#fff" }}
                   />
@@ -572,19 +592,24 @@ const audioRef = useRef(null);
           </>
         )}
 
-        {/* Gallery placeholders */}
+        {/* Gallery */}
         <section className="mt-12">
           <h3 className="text-sm font-semibold mb-3" style={{ color: palette.inkSoft }}>گالری آرایشگاه</h3>
           <div className="grid grid-cols-2 gap-3 mb-3">
-  <img src="/salon1.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
-  <img src="/salon2.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
-</div>
-<img
-  src="/salon3.jpg"
-  alt="سالن نیوفیس"
-  className="mx-auto w-2/3 sm:w-1/2 rounded-xl object-cover"
-  style={{ aspectRatio: "3 / 4" }}
-/>
+            <img src="/salon1.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
+            <img src="/salon2.jpg" alt="سالن نیوفیس" className="aspect-square rounded-xl object-cover w-full" />
+          </div>
+          <img
+            src="/salon3.jpg"
+            alt="سالن نیوفیس"
+            className="mx-auto w-2/3 sm:w-1/2 rounded-xl object-cover"
+            style={{ aspectRatio: "3 / 4" }}
+          />
+          {visitCount !== null && (
+            <p className="text-center text-xs mt-4" style={{ color: palette.inkSoft }}>
+              تعداد بازدید اخیر: {toPersianDigits(visitCount)} نفر
+            </p>
+          )}
         </section>
 
         {/* Admin entry point */}
@@ -643,11 +668,16 @@ const audioRef = useRef(null);
                     </button>
                   </div>
 
+                  {totalBookingsEver !== null && (
+                    <p className="text-xs mb-4" style={{ color: palette.inkSoft }}>
+                      مجموع نوبت‌های ثبت‌شده از ابتدا: {toPersianDigits(totalBookingsEver)}
+                    </p>
+                  )}
                   <div className="text-sm font-semibold mb-2">نوبت‌های ثبت شده ({toPersianDigits(bookings.length)})</div>
                   {sortedBookings.length === 0 ? (
                     <p className="text-sm" style={{ color: palette.inkSoft }}>هنوز نوبتی ثبت نشده است.</p>
                   ) : (
-                 <div className="space-y-2">
+                    <div className="space-y-2">
                       {sortedBookings.map((b) => {
                         const isToday = b.dateKey === todayKey;
                         return (
@@ -681,8 +711,39 @@ const audioRef = useRef(null);
           )}
         </div>
       </main>
-    </div>
-      </main>
+
+      {/* Floating contact button */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        {contactOpen && (
+          <div
+            className="rounded-2xl p-4 w-64 text-sm backdrop-blur-md"
+            style={{ backgroundColor: "rgba(255,255,255,0.9)", border: `1px solid ${palette.line}`, boxShadow: "0 8px 30px rgba(0,0,0,0.15)" }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-bold" style={{ color: palette.wineDeep }}>راه‌های ارتباطی</span>
+              <button onClick={() => setContactOpen(false)} style={{ color: palette.inkSoft }}>
+                <X size={16} />
+              </button>
+            </div>
+            <a href="tel:09xxxxxxxxx" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
+              <Phone size={16} style={{ color: "#EA7A2E" }} /> 09xxxxxxxxx
+            </a>
+            <a href="https://instagram.com/your_instagram" target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
+              <Instagram size={16} style={{ color: "#EA7A2E" }} /> @your_instagram
+            </a>
+            <a href="https://rubika.ir/your_rubika_channel" target="_blank" rel="noreferrer" className="flex items-center gap-2" style={{ color: palette.ink }}>
+              <MessageCircle size={16} style={{ color: "#EA7A2E" }} /> @your_rubika_channel
+            </a>
+          </div>
+        )}
+        <button
+          onClick={() => setContactOpen((v) => !v)}
+          className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md"
+          style={{ backgroundColor: "#EA7A2E", boxShadow: "0 0 18px rgba(234,122,46,0.7)" }}
+        >
+          <Phone size={24} color="#fff" />
+        </button>
+      </div>
     </div>
   );
 }
