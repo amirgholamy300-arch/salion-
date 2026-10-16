@@ -681,39 +681,8 @@ const audioRef = useRef(null);
           )}
         </div>
       </main>
-
-      {/* Floating contact button */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
-        {contactOpen && (
-          <div
-            className="rounded-2xl p-4 w-64 text-sm backdrop-blur-md"
-            style={{ backgroundColor: "rgba(255,255,255,0.9)", border: `1px solid ${palette.line}`, boxShadow: "0 8px 30px rgba(0,0,0,0.15)" }}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-bold" style={{ color: palette.wineDeep }}>راه‌های ارتباطی</span>
-              <button onClick={() => setContactOpen(false)} style={{ color: palette.inkSoft }}>
-                <X size={16} />
-              </button>
-            </div>
-            <a href="tel:09xxxxxxxxx" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
-              <Phone size={16} style={{ color: "#EA7A2E" }} /> 09xxxxxxxxx
-            </a>
-            <a href="https://instagram.com/your_instagram" target="_blank" rel="noreferrer" className="flex items-center gap-2 mb-2" style={{ color: palette.ink }}>
-              <Instagram size={16} style={{ color: "#EA7A2E" }} /> @your_instagram
-            </a>
-            <a href="https://rubika.ir/your_rubika_channel" target="_blank" rel="noreferrer" className="flex items-center gap-2" style={{ color: palette.ink }}>
-              <MessageCircle size={16} style={{ color: "#EA7A2E" }} /> @your_rubika_channel
-            </a>
-          </div>
-        )}
-        <button
-          onClick={() => setContactOpen((v) => !v)}
-          className="w-14 h-14 rounded-full flex items-center justify-center backdrop-blur-md"
-          style={{ backgroundColor: "#EA7A2E", boxShadow: "0 0 18px rgba(234,122,46,0.7)" }}
-        >
-          <Phone size={24} color="#fff" />
-        </button>
-      </div>
+</div>
+      </main>
     </div>
   );
 }
